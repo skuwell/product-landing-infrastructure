@@ -41,3 +41,10 @@ jwt_public_key_pem = <<-EOT
 REPLACE_WITH_YOUR_PUBLIC_KEY
 -----END PUBLIC KEY-----
 EOT
+
+# --- GitHub Actions runner ---
+# Create a PAT at: https://github.com/settings/tokens (classic, 'repo' scope)
+# Runner labels must match 'runs-on' in .github/workflows/ci.yml
+github_repo          = "skuwell/product-landing-app"
+github_runner_labels = "self-hosted,linux,gcp-prod"  # use gcp-dev for a dev VM
+github_runner_pat    = "ghp_REPLACE_WITH_YOUR_PAT"

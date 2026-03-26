@@ -177,3 +177,22 @@ variable "jwt_public_key_pem" {
   type        = string
   sensitive   = true
 }
+
+# === GitHub Actions runner ===
+variable "github_repo" {
+  description = "GitHub repository in 'owner/repo' format (e.g. skuwell/product-landing-app)"
+  type        = string
+  default     = "skuwell/product-landing-app"
+}
+
+variable "github_runner_labels" {
+  description = "Comma-separated runner labels (e.g. self-hosted,linux,gcp-prod)"
+  type        = string
+  default     = "self-hosted,linux,gcp-prod"
+}
+
+variable "github_runner_pat" {
+  description = "GitHub Personal Access Token with 'repo' scope for runner registration"
+  type        = string
+  sensitive   = true
+}

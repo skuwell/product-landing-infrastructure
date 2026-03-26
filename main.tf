@@ -138,6 +138,26 @@ resource "google_secret_manager_secret_iam_member" "db_password_access" {
   member    = "serviceAccount:${module.security.app_service_account_email}"
 }
 
+# GitHub Actions runner PAT (needed by the startup script to register the runner)
+resource "google_secret_manager_secret" "github_runner_pat" {
+  project   = var.project_id
+  secret_id = "github-runner-pat-${var.environment}"
+
+  replication { auto {} }
+}
+
+resource "google_secret_manager_secret_version" "github_runner_pat" {
+  secret      = google_secret_manager_secret.github_runner_pat.id
+  secret_data = var.github_runner_pat
+}
+
+resource "google_secret_manager_secret_iam_member" "github_runner_pat_access" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.github_runner_pat.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${module.security.app_service_account_email}"
+}
+
 # ---------------------------------------------------------------------------
 # Storage — GCS buckets (uploads + backups + terraform-state)
 # ---------------------------------------------------------------------------
@@ -203,18 +223,20 @@ module "compute" {
   enable_security_hardening = true
 
   startup_script = templatefile("${path.module}/startup-script.sh", {
-    project_id          = var.project_id
-    environment         = var.environment
-    app_name            = var.app_name
-    app_repo_url        = var.app_repo_url
-    app_repo_branch     = var.app_repo_branch
-    domain              = var.domain
-    certbot_email       = var.certbot_email
-    db_connection_name  = module.database.instance_connection_name
-    db_name             = var.db_name
-    db_user             = var.db_user
-    backups_bucket      = module.storage.backups_bucket_name
-    allowed_origins     = var.allowed_origins
+    project_id           = var.project_id
+    environment          = var.environment
+    app_name             = var.app_name
+    app_repo_url         = var.app_repo_url
+    app_repo_branch      = var.app_repo_branch
+    domain               = var.domain
+    certbot_email        = var.certbot_email
+    db_connection_name   = module.database.instance_connection_name
+    db_name              = var.db_name
+    db_user              = var.db_user
+    backups_bucket        = module.storage.backups_bucket_name
+    allowed_origins      = var.allowed_origins
+    github_repo          = var.github_repo
+    github_runner_labels = var.github_runner_labels
   })
 
   depends_on = [
