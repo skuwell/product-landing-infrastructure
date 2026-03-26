@@ -1,0 +1,43 @@
+# =============================================================
+# terraform.tfvars.example — copy to terraform.tfvars and fill
+# NEVER commit terraform.tfvars (it contains jwt_private_key_pem)
+# =============================================================
+
+project_id  = "wide-pulsar-477716-p4"
+region      = "us-central1"
+zone        = "us-central1-a"
+environment = "product-landing"
+
+# --- Networking ---
+vpc_name    = "product-landing-vpc"
+subnet_cidr = "10.1.0.0/24"
+
+# --- Compute ---
+vm_machine_type = "e2-standard-2"
+vm_disk_size_gb = 40
+
+# --- Database ---
+db_tier    = "db-g1-small"
+db_version = "POSTGRES_16"
+db_name    = "productlanding"
+db_user    = "app_user"
+
+# --- Application ---
+app_repo_url    = "https://github.com/skuwell/product-landing-app.git"
+app_repo_branch = "main"
+domain          = "your-domain.com"          # set to "" to skip certbot
+certbot_email   = "you@example.com"
+allowed_origins = "https://your-domain.com"
+
+# --- JWT keys (generate with: openssl genrsa 2048 > private.pem && openssl rsa -in private.pem -pubout > public.pem) ---
+jwt_private_key_pem = <<-EOT
+-----BEGIN RSA PRIVATE KEY-----
+REPLACE_WITH_YOUR_PRIVATE_KEY
+-----END RSA PRIVATE KEY-----
+EOT
+
+jwt_public_key_pem = <<-EOT
+-----BEGIN PUBLIC KEY-----
+REPLACE_WITH_YOUR_PUBLIC_KEY
+-----END PUBLIC KEY-----
+EOT
