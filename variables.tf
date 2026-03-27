@@ -196,3 +196,10 @@ variable "github_runner_pat" {
   type        = string
   sensitive   = true
 }
+
+# === Vertex AI / Google Cloud AI ===
+variable "google_cloud_location" {
+  description = "GCP region passed to Vertex AI SDK (GOOGLE_CLOUD_LOCATION). Gemini models are available in us-central1, europe-west4, asia-southeast1 and others."
+  type        = string
+  default     = "us-central1"
+}

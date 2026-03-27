@@ -48,3 +48,7 @@ EOT
 github_repo          = "skuwell/product-landing-app"
 github_runner_labels = "self-hosted,linux,gcp-prod"  # use gcp-dev for a dev VM
 github_runner_pat    = "ghp_REPLACE_WITH_YOUR_PAT"
+
+# --- Vertex AI ---
+# Region must have Gemini 2.0 Flash available (us-central1, europe-west4, asia-southeast1)
+google_cloud_location = "us-central1"

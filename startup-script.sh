@@ -230,6 +230,10 @@ ALGORITHM=RS256
 SECURE_COOKIES=true
 ALLOWED_ORIGINS=$${ALLOWED_ORIGINS:-$ALLOWED_ORIGINS}
 LOG_LEVEL=INFO
+# Vertex AI Gemini — enables image-based HTS code lookup.
+# ADC on GCP uses the VM's service account automatically; no API key needed.
+GOOGLE_CLOUD_PROJECT=$PROJECT_ID
+GOOGLE_CLOUD_LOCATION=${google_cloud_location}
 EOF
 chmod 600 "$APP_DIR/.env"
 

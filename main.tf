@@ -34,6 +34,7 @@ resource "google_project_service" "required_apis" {
     "iam.googleapis.com",
     "logging.googleapis.com",
     "monitoring.googleapis.com",
+    "aiplatform.googleapis.com",   # Vertex AI — Gemini image-based HTS lookup
   ])
 
   project            = var.project_id
@@ -158,6 +159,13 @@ resource "google_secret_manager_secret_iam_member" "github_runner_pat_access" {
   member    = "serviceAccount:${module.security.app_service_account_email}"
 }
 
+# Grant the VM service account access to Vertex AI for Gemini HTS code lookup
+resource "google_project_iam_member" "vertex_ai_user" {
+  project = var.project_id
+  role    = "roles/aiplatform.user"
+  member  = "serviceAccount:${module.security.app_service_account_email}"
+}
+
 # ---------------------------------------------------------------------------
 # Storage — GCS buckets (uploads + backups + terraform-state)
 # ---------------------------------------------------------------------------
@@ -237,6 +245,7 @@ module "compute" {
     allowed_origins      = var.allowed_origins
     github_repo          = var.github_repo
     github_runner_labels = var.github_runner_labels
+    google_cloud_location = var.google_cloud_location
   })
 
   depends_on = [
